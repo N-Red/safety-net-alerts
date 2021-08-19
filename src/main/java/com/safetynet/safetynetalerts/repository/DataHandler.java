@@ -1,7 +1,9 @@
 package com.safetynet.safetynetalerts.repository;
 
+import ch.qos.logback.core.property.ResourceExistsPropertyDefiner;
 import com.jsoniter.JsonIterator;
 import com.safetynet.safetynetalerts.model.Data;
+import com.safetynet.safetynetalerts.model.Person;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,7 @@ public class DataHandler {
     }
 
     public void save() {
+        System.out.println("SAVED : TO DO");
 
     }
-
 }

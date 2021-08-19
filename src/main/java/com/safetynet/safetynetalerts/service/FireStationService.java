@@ -42,4 +42,21 @@ public class FireStationService {
         }
         return false;
     }
+    /* POST*/
+
+    public void addFireStation(FireStation fireStation) {
+        if(isValid(fireStation)){
+            fireStationRepository.saveFireStation(fireStation);
+        }else{
+            System.out.println("Error : no valid add FireStation");
+        }
+    }
+
+    private boolean isValid(FireStation fireStation) {
+        if (fireStation != null) {
+            //CHECK IS PERSON HAVE THE SAME PROPRIETIES
+            return true;
+        }
+        return false;
+    }
 }

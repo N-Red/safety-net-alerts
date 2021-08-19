@@ -6,6 +6,8 @@ import com.safetynet.safetynetalerts.repository.FireStationRepository;
 import com.safetynet.safetynetalerts.repository.MedicalRecordRepository;
 import com.safetynet.safetynetalerts.repository.PersonRepository;
 import com.safetynet.safetynetalerts.model.Person;
+import com.safetynet.safetynetalerts.service.dto.FireStationDto;
+import com.safetynet.safetynetalerts.service.dto.FireStationPersonDto;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -156,6 +158,7 @@ public class PersonService {
     public List<String> findFloodStations(List<Integer> integers) {
         List<String> result = new ArrayList<>();
         List<MedicalRecord> medicalrecords = medicalrecordRepository.findAllMedicalRecords();
+
         for (Integer integer : integers) {
 
             List<FireStation> firestations = firestationRepository.findAllFireStationsAddressByNumber(integer);
@@ -210,5 +213,106 @@ public class PersonService {
         }
         return false;
     }
+
+    /* DTO */
+    public FireStationDto findPersonsByFireStation(int stationNumber) {
+
+        FireStationDto result = new FireStationDto();
+        List<FireStationPersonDto> people = new ArrayList<>();
+        result.setPeople(people);
+
+        List<FireStation> fireStations = firestationRepository.findAllFireStationsAddressByNumber(stationNumber);
+        List<MedicalRecord> medicalRecords = medicalrecordRepository.findAllMedicalRecords();
+        List<Person> persons = personRepository.findAllPersons();
+
+        int childrenCount = 0;
+        int adultsCount = 0;
+
+        for (Person person : persons) {
+            FireStation fireStation = fireStationContainPersons(fireStations, person);
+            if (fireStation != null) {
+                FireStationPersonDto fireStationPersonDto = new FireStationPersonDto();
+                fireStationPersonDto.setFirstName(person.getFirstName());
+                fireStationPersonDto.setLastName(person.getLastName());
+                fireStationPersonDto.setAddress(person.getAddress());
+                fireStationPersonDto.setPhoneNumber(person.getPhone());
+
+                for (Person person2 : persons) {
+                    if (person == person2) {
+                        MedicalRecord medicalRecord = medicalRecordsContainsPerson(medicalRecords, person2);
+                        if (medicalRecord != null) {
+                            if ((computeAge(medicalRecord.getBirthdate()) < 18)) {
+                                childrenCount++;
+                            } else
+                                adultsCount++;
+                        }
+                    }
+                }
+                result.setTotalChildren(childrenCount);
+                result.setTotalAdults(adultsCount);
+                result.getPeople().add(fireStationPersonDto);
+            }
+
+        }
+        return result;
+    }
+
+    private int computeAge(String string) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+        LocalDate currentDate = LocalDate.now();
+        LocalDate birthdate = LocalDate.parse(string, formatter);
+        Period age = Period.between(birthdate, currentDate);
+        return age.getYears();
+    }
+
+    private MedicalRecord medicalRecordsContainsPerson(List<MedicalRecord> medicalRecords, Person person) {
+        MedicalRecord result = new MedicalRecord();
+        for (MedicalRecord medicalRecord : medicalRecords) {
+            if (medicalRecord.getLastName().equals(person.getLastName()) &&
+                    medicalRecord.getFirstName().equals(person.getFirstName())) {
+
+                result.setFirstName(medicalRecord.getFirstName());
+                result.setLastName(medicalRecord.getLastName());
+                result.setMedications(medicalRecord.getMedications());
+                result.setAllergies(medicalRecord.getAllergies());
+                result.setBirthdate(medicalRecord.getBirthdate());
+
+            }
+        }
+        return result;
+    }
+
+    private FireStation fireStationContainPersons(List<FireStation> fireStations, Person person) {
+        FireStation result = new FireStation();
+        for (FireStation fireStation : fireStations) {
+            if (
+                    fireStation.getAddress().equals(person.getAddress())
+            ) {
+                result.setStation(fireStation.getStation());
+                result.setAddress(fireStation.getAddress());
+                return result;
+            }
+        }
+        return null;
+    }
+
+
+    /* POST*/
+
+    public void addPerson(Person person) {
+        if (isValid(person)){
+            personRepository.savePerson(person);
+        }else{
+            System.out.println("Error : no valid add Person");
+        }
+    }
+    private boolean isValid(Person person) {
+        if (person != null) {
+            //CHECK IS PERSON HAVE THE SAME PROPRIETIES
+            return true;
+        }
+        return false;
+    }
+
 
 }

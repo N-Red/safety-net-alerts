@@ -17,4 +17,8 @@ public class MedicalRecordRepository {
         return dataHandler.getData().getMedicalRecords();
     }
 
+    public void saveMedicalRecord(MedicalRecord medicalRecord) {
+        dataHandler.getData().getMedicalRecords().add(medicalRecord);
+        dataHandler.save();
+    }
 }

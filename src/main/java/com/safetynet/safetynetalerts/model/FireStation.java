@@ -1,8 +1,5 @@
 package com.safetynet.safetynetalerts.model;
 
-import javax.persistence.*;
-
-@Entity
 public class FireStation {
 
     private String address;

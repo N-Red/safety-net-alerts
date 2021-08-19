@@ -38,4 +38,14 @@ public class PersonRepository {
                 .collect(Collectors.toList());
     }
 
+    public List<Person> findAllpersonByAddress(String address) {
+        return dataHandler.getData().getPersons().stream()
+                .filter(p -> p.getAddress().equals(address))
+                .collect(Collectors.toList());
+    }
+    /* POST*/
+    public void savePerson(Person person) {
+        dataHandler.getData().getPersons().add(person);
+        dataHandler.save();
+    }
 }

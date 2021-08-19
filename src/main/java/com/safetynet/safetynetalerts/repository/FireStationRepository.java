@@ -1,6 +1,8 @@
 package com.safetynet.safetynetalerts.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.safetynetalerts.model.FireStation;
+import com.safetynet.safetynetalerts.model.Person;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,8 +20,9 @@ public class FireStationRepository {
     }
 
     public List<FireStation> findAllFireStationsAddressByNumber(Integer number) {
+        String num = String.valueOf(number);
         return dataHandler.getData().getFirestations().stream()
-                .filter(p -> p.getStation().equals(number.toString()))
+                .filter(p -> p.getStation().equals(num))
                 .collect(Collectors.toList());
     }
 
@@ -27,5 +30,10 @@ public class FireStationRepository {
         return dataHandler.getData().getFirestations().stream()
                 .filter(firestation -> firestation.getAddress().equals(address))
                 .collect(Collectors.toList());
+    }
+
+    public void saveFireStation(FireStation fireStation) {
+        dataHandler.getData().getFirestations().add(fireStation);
+        dataHandler.save();
     }
 }

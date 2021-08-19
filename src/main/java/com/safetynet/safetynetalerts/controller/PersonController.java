@@ -2,8 +2,10 @@ package com.safetynet.safetynetalerts.controller;
 
 import com.safetynet.safetynetalerts.model.Person;
 import com.safetynet.safetynetalerts.service.PersonService;
+import com.safetynet.safetynetalerts.service.dto.FireStationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -34,12 +36,13 @@ public class PersonController {
         return this.personService.findAllChildrenByAddress(address);
     }
 
-    //http://localhost:8080/firestation?stationNumber=<stationNumber>
-    @RequestMapping(value = "firestation", method = RequestMethod.GET)
-    public List<String> findPersonsByFirestationNumber(@RequestParam(name = "stationNumber") int stationNumber) {
-        return this.personService.findPersonsByFireStationNumber(stationNumber);
-    }
-
+    /*  Commenté pour tester les DTO
+        //http://localhost:8080/firestation?stationNumber=<stationNumber>
+        @RequestMapping(value = "firestation", method = RequestMethod.GET)
+        public List<String> findPersonsByFirestationNumber(@RequestParam(name = "stationNumber") int stationNumber) {
+            return this.personService.findPersonsByFireStationNumber(stationNumber);
+        }
+    */
     //http://localhost:8080/fire?address=<address>
     @RequestMapping(value = "fire", method = RequestMethod.GET)
     public List<String> findPersonsByAddressWithFireStationNumberWithMedicalRecord(@RequestParam(name = "address") String address) {
@@ -56,5 +59,21 @@ public class PersonController {
     @RequestMapping(value = "flood/stations", method = RequestMethod.GET)
     public List<String> findFloodStations(@RequestParam(name = "stations") List<Integer> fireStation) {
         return this.personService.findFloodStations(fireStation);
+    }
+
+    /* DTO */
+
+    //http://localhost:8080/firestation?stationNumber=<stationNumber>
+    @RequestMapping(value = "firestation", method = RequestMethod.GET)
+    public FireStationDto findPersonsByFirestationNumber(@RequestParam(name = "stationNumber") int stationNumber) {
+        return this.personService.findPersonsByFireStation(stationNumber);
+    }
+
+
+    /*POST*/
+    //http://localhost:8080/person=<Person person>
+    @PostMapping(value = "person")
+    public void addAPerson(@RequestBody Person person) {
+        personService.addPerson(person);
     }
 }
