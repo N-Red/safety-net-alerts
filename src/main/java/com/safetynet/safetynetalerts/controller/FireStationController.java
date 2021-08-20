@@ -13,6 +13,8 @@ public class FireStationController {
     @Autowired
     private FireStationService fireStationService;
 
+    /* GET */
+
     @RequestMapping(value = "/Firestations", method = RequestMethod.GET)
     public List<FireStation> getListOfFirestation() {
         return this.fireStationService.getList();
@@ -24,10 +26,17 @@ public class FireStationController {
         return this.fireStationService.findPhoneNumbersByStationNumber(firestation_number);
     }
 
-    /*POST*/
-    //http://localhost:8080/person=<Person person>
+    /* POST */
+
+    //http://localhost:8080/firestation=<firestation>
     @PostMapping(value = "firestation")
     public void addAFireStation(@RequestBody FireStation fireStation) {
         fireStationService.addFireStation(fireStation);
     }
+
+    /* DELETE */
+    //TODO: Delete into FireStationController
+
+    /* PUT */
+    //TODO: Put into FireStationController
 }

@@ -13,18 +13,5 @@ class SafetynetalertsApplicationTests {
     @Test
     void contextLoads() {
     }
-
-    @Test
-    public void testAge() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
-        LocalDate birthdate = LocalDate.parse("01/01/2000",formatter);
-        LocalDate currentDate = LocalDate.now() ;
-        Period age = Period.between(birthdate, currentDate);
-        if(age.getYears()<18){
-            System.out.println("Il est mineur");
-        }else{
-            System.out.println("Il est majeur");
-        }
-		System.out.println(age);
-    }
+    //TODO : Create tests
 }

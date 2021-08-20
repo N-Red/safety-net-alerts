@@ -13,6 +13,8 @@ public class PersonRepository {
         this.dataHandler = dataHandler;
     }
 
+    /* GET */
+
     public List<Person> findAllPersons() {
         return dataHandler.getData().getPersons();
     }
@@ -33,19 +35,25 @@ public class PersonRepository {
     public List<Person> findAllMembersOfHousehold(Person person) {
         return dataHandler.getData().getPersons().stream()
                 .filter(p -> p.getLastName().equals(person.getLastName()))
-                .filter(p -> p.getAddress().equals(person.getAddress()))
                 .filter(p -> !p.getFirstName().equals(person.getFirstName()))
+                .filter(p -> p.getAddress().equals(person.getAddress()))
                 .collect(Collectors.toList());
     }
 
-    public List<Person> findAllpersonByAddress(String address) {
-        return dataHandler.getData().getPersons().stream()
-                .filter(p -> p.getAddress().equals(address))
-                .collect(Collectors.toList());
-    }
     /* POST*/
-    public void savePerson(Person person) {
+
+    public void addPerson(Person person) {
         dataHandler.getData().getPersons().add(person);
         dataHandler.save();
     }
+
+    /* DELETE */
+
+    public void deletePerson(Person person) {
+        //TODO : delete person with JSON into PersonRepository
+       // dataHandler.getData().getPersons().equals(person);
+    }
+
+    /* PUT */
+
 }

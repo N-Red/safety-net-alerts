@@ -14,15 +14,24 @@ public class MedicalRecordController {
     @Autowired
     private MedicalRecordService medicalRecordService;
 
+    /* GET */
+
     @GetMapping(value = "/MedicalRecords")
     public List<MedicalRecord> medicalRecordsList() {
         return medicalRecordService.getList();
     }
 
-    /*POST*/
-    //http://localhost:8080/person=<Person person>
+    /* POST */
+
+    //http://localhost:8080/medicalRecord=<medicalRecord>
     @PostMapping(value = "medicalRecord")
     public void addAPerson(@RequestBody MedicalRecord medicalRecord) {
         medicalRecordService.addMedicalRecord(medicalRecord);
     }
+
+    /* DELETE */
+    //TODO: Delete into MedicalRecordController
+
+    /* PUT */
+    //TODO: Put into MedicalRecordController
 }

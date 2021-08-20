@@ -6,6 +6,8 @@ import com.safetynet.safetynetalerts.repository.FireStationRepository;
 import com.safetynet.safetynetalerts.repository.MedicalRecordRepository;
 import com.safetynet.safetynetalerts.repository.PersonRepository;
 import com.safetynet.safetynetalerts.model.Person;
+import com.safetynet.safetynetalerts.service.dto.ChildAlertDto;
+import com.safetynet.safetynetalerts.service.dto.FireDto;
 import com.safetynet.safetynetalerts.service.dto.FireStationDto;
 import com.safetynet.safetynetalerts.service.dto.FireStationPersonDto;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class PersonService {
         this.firestationRepository = firestationRepository;
     }
 
+
+    /* GET */
+
     public List<Person> getList() {
         return this.personRepository.findAllPersons();
     }
@@ -40,6 +45,9 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
+    /*
+    Method without Dto
+
     public List<String> findAllChildrenByAddress(String address) {
         List<String> result = new ArrayList<>();
         List<MedicalRecord> medicalrecords = medicalrecordRepository.findAllMedicalRecords();
@@ -49,7 +57,7 @@ public class PersonService {
             for (Person person : persons) {
                 //To link Person with medicalRecord, same first name and last name
                 if (personsContainsMedicalRecord(medicalRecord, person)) {
-                    int age = calculateAge(medicalRecord.getBirthdate());
+                    int age = computeAge(medicalRecord.getBirthdate());
                     if (age < 18) {
                         result.add("First Name : " + person.getFirstName());
                         result.add("Last Name : " + person.getLastName());
@@ -67,7 +75,9 @@ public class PersonService {
         }
         return result;
     }
-
+*/
+    /*
+    Method without Dto
     public List<String> findPersonsByFireStationNumber(int stationNumber) {
         List<String> result = new ArrayList<>();
         List<Person> persons = this.personRepository.findAllPersons();
@@ -82,7 +92,7 @@ public class PersonService {
                 if (fireStation.getAddress().equals(person.getAddress())) {
                     for (MedicalRecord medicalRecord : medicalRecords) {
                         if (personsContainsMedicalRecord(medicalRecord, person)) {
-                            int age = calculateAge(medicalRecord.getBirthdate());
+                            int age = computeAge(medicalRecord.getBirthdate());
                             if (age > 18) {
                                 totalAdult++;
                             } else {
@@ -101,7 +111,9 @@ public class PersonService {
         result.add("Total Children : " + totalChildren);
         return result;
     }
-
+    */
+    /*
+    Method without Dto
     public List<String> findPersonsByAddressWithFireStationNumberAndMedicalRecord(String address) {
         List<String> result = new ArrayList<>();
         List<Person> persons = personRepository.findAllPersonsByAddress(address);
@@ -114,7 +126,7 @@ public class PersonService {
         for (Person person : persons) {
             for (MedicalRecord medicalRecord : medicalrecords) {
                 if (personsContainsMedicalRecord(medicalRecord, person)) {
-                    int age = calculateAge(medicalRecord.getBirthdate());
+                    int age = computeAge(medicalRecord.getBirthdate());
                     result.add("Last Name : " + person.getLastName());
                     result.add("Phone : " + person.getPhone());
                     result.add("Age : " + age + "ans");
@@ -125,7 +137,9 @@ public class PersonService {
         }
         return result;
     }
+    */
 
+    //TODO : Change with DTO
     public List<String> findPersonInfo(String firstName, String lastName) {
 
         List<String> result = new ArrayList<>();
@@ -139,7 +153,7 @@ public class PersonService {
 
             for (MedicalRecord medicalRecord : medicalrecords) {
                 if (personsContainsMedicalRecord(medicalRecord, person)) {
-                    age = calculateAge(medicalRecord.getBirthdate());
+                    age = computeAge(medicalRecord.getBirthdate());
                     medications = String.valueOf(medicalRecord.getMedications());
                     allergies = String.valueOf(medicalRecord.getAllergies());
                 }
@@ -155,6 +169,7 @@ public class PersonService {
         return result;
     }
 
+    //TODO : Change with DTO
     public List<String> findFloodStations(List<Integer> integers) {
         List<String> result = new ArrayList<>();
         List<MedicalRecord> medicalrecords = medicalrecordRepository.findAllMedicalRecords();
@@ -173,7 +188,7 @@ public class PersonService {
 
                     for (MedicalRecord medicalRecord : medicalrecords) {
                         if (personsContainsMedicalRecord(medicalRecord, person)) {
-                            int age = calculateAge(medicalRecord.getBirthdate());
+                            int age = computeAge(medicalRecord.getBirthdate());
                             result.add(age + "ans");
                             result.add(String.valueOf(medicalRecord.getAllergies()));
                             result.add(String.valueOf(medicalRecord.getMedications()));
@@ -184,7 +199,7 @@ public class PersonService {
                         result.add(member.getFirstName() + " " + member.getLastName());
                         for (MedicalRecord medicalRecord : medicalrecords) {
                             if (personsContainsMedicalRecord(medicalRecord, member)) {
-                                int age = calculateAge(medicalRecord.getBirthdate());
+                                int age = computeAge(medicalRecord.getBirthdate());
                                 result.add(age + "ans");
                                 result.add(String.valueOf(medicalRecord.getAllergies()));
                                 result.add(String.valueOf(medicalRecord.getMedications()));
@@ -197,22 +212,7 @@ public class PersonService {
         }
         return result;
     }
-
-    private int calculateAge(String string) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
-        LocalDate currentDate = LocalDate.now();
-        LocalDate birthdate = LocalDate.parse(string, formatter);
-        Period age = Period.between(birthdate, currentDate);
-        return age.getYears();
-    }
-
-    private boolean personsContainsMedicalRecord(MedicalRecord medicalRecord, Person person) {
-        if (medicalRecord.getLastName().equals(person.getLastName()) &&
-                medicalRecord.getFirstName().equals(person.getFirstName())) {
-            return true;
-        }
-        return false;
-    }
+    //
 
     /* DTO */
     public FireStationDto findPersonsByFireStation(int stationNumber) {
@@ -257,6 +257,53 @@ public class PersonService {
         return result;
     }
 
+    public List<ChildAlertDto> findChildrenByAddress(String address) {
+        List<ChildAlertDto> result = new ArrayList<>();
+        List<MedicalRecord> medicalRecords = medicalrecordRepository.findAllMedicalRecords();
+        List<Person> persons = personRepository.findAllPersonsByAddress(address);
+        for (Person person : persons) {
+            for (MedicalRecord medicalRecord : medicalRecords) {
+                if (personsContainsMedicalRecord(medicalRecord, person)) {
+                    int age = computeAge(medicalRecord.getBirthdate());
+                    if (age < 18) {
+                        ChildAlertDto dto = new ChildAlertDto();
+                        dto.setFirstName(person.getFirstName());
+                        dto.setLastName(person.getLastName());
+                        dto.setAge(String.valueOf(age));
+                        List<Person> membersOfHousehold = personRepository.findAllMembersOfHousehold(person);
+                        dto.setMemberOfHousehold(membersOfHousehold);
+                        result.add(dto);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<FireDto> findPersonsWithMedicalRecordAndFireStationByAddress(String address) {
+        List<FireDto> result = new ArrayList();
+
+        List<Person> persons = personRepository.findAllPersonsByAddress(address);
+        FireStation fireStation = firestationRepository.findFireStationsNumberByAddress(address);
+        List<MedicalRecord> medicalRecords = medicalrecordRepository.findAllMedicalRecords();
+        for (Person person : persons) {
+            for (MedicalRecord medicalRecord : medicalRecords) {
+                if (personsContainsMedicalRecord(medicalRecord, person)) {
+                    int age = computeAge(medicalRecord.getBirthdate());
+                    FireDto dto = new FireDto();
+                    dto.setFireStation(fireStation.getStation());
+                    dto.setLastName(person.getLastName());
+                    dto.setAge(String.valueOf(age));
+                    dto.setPhoneNumber(person.getPhone());
+                    dto.setAllergies(medicalRecord.getAllergies());
+                    dto.setMedications(medicalRecord.getMedications());
+                    result.add(dto);
+                }
+            }
+        }
+        return result;
+    }
+
     private int computeAge(String string) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
         LocalDate currentDate = LocalDate.now();
@@ -296,16 +343,23 @@ public class PersonService {
         return null;
     }
 
+    private boolean personsContainsMedicalRecord(MedicalRecord medicalRecord, Person person) {
+        if (medicalRecord.getLastName().equals(person.getLastName()) &&
+                medicalRecord.getFirstName().equals(person.getFirstName())) {
+            return true;
+        }
+        return false;
+    }
 
     /* POST*/
-
     public void addPerson(Person person) {
-        if (isValid(person)){
-            personRepository.savePerson(person);
-        }else{
+        if (isValid(person)) {
+            personRepository.addPerson(person);
+        } else {
             System.out.println("Error : no valid add Person");
         }
     }
+
     private boolean isValid(Person person) {
         if (person != null) {
             //CHECK IS PERSON HAVE THE SAME PROPRIETIES
@@ -314,5 +368,17 @@ public class PersonService {
         return false;
     }
 
+    public void deleteAPerson(Person person) {
+        if (isValid(person)) {
+            personRepository.deletePerson(person);
+        } else {
+            System.out.println("Error : no valid delete Person");
+        }
+    }
+
+    /* DELETE */
+
+
+    /* PUT */
 
 }

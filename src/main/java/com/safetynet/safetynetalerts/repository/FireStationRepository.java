@@ -3,6 +3,7 @@ package com.safetynet.safetynetalerts.repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safetynet.safetynetalerts.model.FireStation;
 import com.safetynet.safetynetalerts.model.Person;
+import com.safetynet.safetynetalerts.service.dto.FireDto;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,8 @@ public class FireStationRepository {
         this.dataHandler = dataHandler;
     }
 
+    /* GET */
+
     public List<FireStation> findAllFirestations() {
         return dataHandler.getData().getFirestations();
     }
@@ -26,14 +29,28 @@ public class FireStationRepository {
                 .collect(Collectors.toList());
     }
 
-    public List<FireStation> findAllFireStationsNumberByAddress(String address) {
-        return dataHandler.getData().getFirestations().stream()
-                .filter(firestation -> firestation.getAddress().equals(address))
-                .collect(Collectors.toList());
+    public FireStation findFireStationsNumberByAddress(String address) {
+        FireStation fireStationResult = new FireStation();
+        List<FireStation> fireStations = dataHandler.getData().getFirestations().stream().collect(Collectors.toList());
+        for (FireStation fireStation : fireStations){
+            if(fireStation.getAddress().equals(address)){
+                fireStationResult.setStation(fireStation.getStation());
+                fireStationResult.setAddress(fireStation.getAddress());
+            }
+        }
+        return fireStationResult;
+
     }
+
+    /* POST */
 
     public void saveFireStation(FireStation fireStation) {
         dataHandler.getData().getFirestations().add(fireStation);
         dataHandler.save();
     }
+
+    /* DELETE */
+
+    /* PUT */
+
 }

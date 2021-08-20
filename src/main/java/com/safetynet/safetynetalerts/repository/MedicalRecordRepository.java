@@ -13,12 +13,21 @@ public class MedicalRecordRepository {
         this.dataHandler = dataHandler;
     }
 
+    /* GET */
+
     public List<MedicalRecord> findAllMedicalRecords() {
         return dataHandler.getData().getMedicalRecords();
     }
+
+    /* POST */
 
     public void saveMedicalRecord(MedicalRecord medicalRecord) {
         dataHandler.getData().getMedicalRecords().add(medicalRecord);
         dataHandler.save();
     }
+
+    /* DELETE */
+
+    /* PUT */
+
 }

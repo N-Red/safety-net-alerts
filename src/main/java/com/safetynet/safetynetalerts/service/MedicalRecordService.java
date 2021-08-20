@@ -15,10 +15,11 @@ public class MedicalRecordService {
         this.medicalRecordRepository = medicalRecordRepository;
     }
 
+    /* GET */
+
     public List<MedicalRecord> getList() {
         return this.medicalRecordRepository.findAllMedicalRecords();
     }
-
 
     /* POST*/
 
@@ -29,6 +30,7 @@ public class MedicalRecordService {
             System.out.println("Error : no valid add MedicalRecord");
         }
     }
+
     private boolean isValid(MedicalRecord medicalRecord) {
         if (medicalRecord != null) {
             //CHECK IS PERSON HAVE THE SAME PROPRIETIES
@@ -36,4 +38,9 @@ public class MedicalRecordService {
         }
         return false;
     }
+
+    /* DELETE */
+
+    /* PUT */
+
 }

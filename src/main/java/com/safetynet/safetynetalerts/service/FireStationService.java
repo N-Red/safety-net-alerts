@@ -18,6 +18,8 @@ public class FireStationService {
         this.personRepository = personRepository;
     }
 
+    /* GET */
+
     public List<FireStation> getList() {
         return this.fireStationRepository.findAllFirestations();
     }
@@ -42,7 +44,8 @@ public class FireStationService {
         }
         return false;
     }
-    /* POST*/
+
+    /* POST */
 
     public void addFireStation(FireStation fireStation) {
         if(isValid(fireStation)){
@@ -59,4 +62,9 @@ public class FireStationService {
         }
         return false;
     }
+
+    /* DELETE */
+
+    /* PUT */
+
 }
