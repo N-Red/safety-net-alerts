@@ -1,5 +1,4 @@
 package com.safetynet.safetynetalerts.service.dto;
-/*FUNCTIONAL*/
 
 public class FireStationPersonDto {
     private String firstName;

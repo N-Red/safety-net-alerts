@@ -1,7 +1,9 @@
 package com.safetynet.safetynetalerts.repository;
 
+import com.safetynet.safetynetalerts.model.FireStation;
 import com.safetynet.safetynetalerts.model.Person;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,10 +52,40 @@ public class PersonRepository {
     /* DELETE */
 
     public void deletePerson(Person person) {
-        //TODO : delete person with JSON into PersonRepository
-       // dataHandler.getData().getPersons().equals(person);
+        if (lookForIndexOfPerson(person) != -1) {
+            dataHandler.getData().getPersons().remove(lookForIndexOfPerson(person));
+        }
+    }
+
+    private int lookForIndexOfPerson(Person person) {
+        List<Person> personList = findAllPersons();
+        int index = -1;
+        for (int i = 0; i < personList.size(); i++) {
+            Person p = personList.get(i);
+            if (p.getLastName().equals(person.getLastName())
+                    && p.getFirstName().equals(person.getFirstName())) {
+                index = i;
+            }
+        }
+        return index;
     }
 
     /* PUT */
-
+    public void putAPerson(Person person) {
+        // look for the person to update
+        List<Person> persons = dataHandler.getData().getPersons();
+        for (Person p : persons) {
+            if (p.getFirstName().equals((person.getFirstName()))
+                    && p.getLastName().equals(person.getLastName())) {
+                p.setAddress(person.getAddress());
+                p.setCity(person.getCity());
+                p.setEmail(person.getEmail());
+                p.setZip(person.getZip());
+                p.setPhone(person.getPhone());
+            }
+        }
+        // set the new properties of fireStation
+        dataHandler.getData().setPersons(persons);
+        dataHandler.save();
+    }
 }

@@ -6,6 +6,7 @@ import com.safetynet.safetynetalerts.model.Person;
 import com.safetynet.safetynetalerts.service.dto.FireDto;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
 @Repository
@@ -51,6 +52,37 @@ public class FireStationRepository {
 
     /* DELETE */
 
+    public void deleteFireStation(FireStation fireStation) {
+        dataHandler.getData().getFirestations().remove(lookForIndexOfFireStation(fireStation));
+        dataHandler.save();
+    }
+
+    private int lookForIndexOfFireStation(FireStation fireStation) {
+        List<FireStation> fireStationList = findAllFirestations();
+        int index = 0;
+        for (int i = 0; i < fireStationList.size(); i++) {
+            FireStation fs = fireStationList.get(i);
+            if (fs.getAddress().equals(fireStation.getAddress())
+                    && fs.getStation().equals(fireStation.getStation())) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
     /* PUT */
+
+    public void putAFireStation(FireStation fireStation) {
+        // look for the person to update
+        List<FireStation> fireStations = dataHandler.getData().getFirestations();
+        for (FireStation fs : fireStations) {
+            if (fs.getAddress().equals((fireStation.getAddress()))) {
+                fs.setStation(fireStation.getStation());
+            }
+        }
+        // set the new properties of fireStation
+        dataHandler.getData().setFirestations(fireStations);
+        dataHandler.save();
+    }
 
 }

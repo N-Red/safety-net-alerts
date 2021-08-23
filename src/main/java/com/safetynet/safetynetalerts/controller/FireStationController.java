@@ -35,8 +35,18 @@ public class FireStationController {
     }
 
     /* DELETE */
-    //TODO: Delete into FireStationController
+
+    //http://localhost:8080/deleteFireStation=<firestation>
+    @DeleteMapping(value = "deleteFireStation")
+    public void deleteAFireStation(@RequestBody FireStation fireStation) {
+        fireStationService.deleteAPerson(fireStation);
+    }
 
     /* PUT */
-    //TODO: Put into FireStationController
+
+    //http://localhost:8080/putFireStation=<firestation>
+    @PutMapping(value = "putFireStation")
+    public void putAFireStation(@RequestBody FireStation fireStation){
+        fireStationService.putAFireStation(fireStation);
+    }
 }

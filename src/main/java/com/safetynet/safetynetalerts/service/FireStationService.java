@@ -48,23 +48,33 @@ public class FireStationService {
     /* POST */
 
     public void addFireStation(FireStation fireStation) {
-        if(isValid(fireStation)){
-            fireStationRepository.saveFireStation(fireStation);
-        }else{
-            System.out.println("Error : no valid add FireStation");
-        }
-    }
-
-    private boolean isValid(FireStation fireStation) {
-        if (fireStation != null) {
-            //CHECK IS PERSON HAVE THE SAME PROPRIETIES
-            return true;
-        }
-        return false;
+        fireStationRepository.saveFireStation(fireStation);
     }
 
     /* DELETE */
 
+    public void deleteAPerson(FireStation fireStation) {
+        if(containsInFireStationList(fireStation)){
+            fireStationRepository.deleteFireStation(fireStation);
+        }
+
+    }
+
+    private boolean containsInFireStationList(FireStation fireStation){
+        List <FireStation> fireStations = fireStationRepository.findAllFirestations();
+        for (FireStation fs : fireStations){
+            if(fs.getAddress().equals(fireStation.getAddress())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* PUT */
+
+    public void putAFireStation(FireStation fireStation) {
+            fireStationRepository.putAFireStation(fireStation);
+    }
+
 
 }

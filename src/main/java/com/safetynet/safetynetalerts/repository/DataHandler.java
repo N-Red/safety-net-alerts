@@ -1,11 +1,15 @@
 package com.safetynet.safetynetalerts.repository;
 
 import com.jsoniter.JsonIterator;
+import com.jsoniter.output.JsonStream;
 import com.safetynet.safetynetalerts.model.Data;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 @Component
@@ -23,8 +27,14 @@ public class DataHandler {
     }
 
     public void save() {
-        //TODO : save new values into JSON
-        System.out.println("JSON SAVED");
+        String json = JsonStream.serialize(data);
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter("classpath:data.json"));
+            writer.write(json);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
 }

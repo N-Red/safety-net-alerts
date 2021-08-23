@@ -1,6 +1,7 @@
 package com.safetynet.safetynetalerts.service.dto;
 
-import com.safetynet.safetynetalerts.model.MedicalRecord;
+
+import com.safetynet.safetynetalerts.model.Person;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ personnes par adresse. Elle doit aussi inclure le nom, le numéro de téléphone
 faire figurer leurs antécédents médicaux (médicaments, posologie et allergies) à côté de chaque nom.
  */
 public class FloodDto {
-    private List<FireStationPersonDto> people;
+    private List<Person> people;
     private String lastName;
     private String phoneNumber;
     private int age;
@@ -21,7 +22,7 @@ public class FloodDto {
     public FloodDto() {
     }
 
-    public FloodDto(List<FireStationPersonDto> people, String lastName, String phoneNumber, int age, String[] medications, String[] allergies) {
+    public FloodDto(List<Person> people, String lastName, String phoneNumber, int age, String[] medications, String[] allergies) {
         this.people = people;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -30,11 +31,11 @@ public class FloodDto {
         this.allergies = allergies;
     }
 
-    public List<FireStationPersonDto> getPeople() {
+    public List<Person> getPeople() {
         return people;
     }
 
-    public void setPeople(List<FireStationPersonDto> people) {
+    public void setPeople(List<Person> people) {
         this.people = people;
     }
 

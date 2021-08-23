@@ -8,7 +8,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 @SpringBootTest
-class SafetynetalertsApplicationTests {
+class SafetyNetAlertsApplicationTests {
 
     @Test
     void contextLoads() {

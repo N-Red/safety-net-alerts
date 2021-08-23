@@ -1,5 +1,6 @@
 package com.safetynet.safetynetalerts.controller;
 
+import com.safetynet.safetynetalerts.model.FireStation;
 import com.safetynet.safetynetalerts.model.MedicalRecord;
 import com.safetynet.safetynetalerts.model.Person;
 import com.safetynet.safetynetalerts.repository.MedicalRecordRepository;
@@ -30,8 +31,18 @@ public class MedicalRecordController {
     }
 
     /* DELETE */
-    //TODO: Delete into MedicalRecordController
+
+    //http://localhost:8080/deleteMedicalRecord=<medicalRecord>
+    @DeleteMapping(value = "deleteMedicalRecord")
+    public void deleteAMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+        medicalRecordService.deleteARecordService(medicalRecord);
+    }
 
     /* PUT */
-    //TODO: Put into MedicalRecordController
+
+    //http://localhost:8080/putMedicalRecord=<medicalRecord>
+    @PutMapping(value = "putMedicalRecord")
+    public void putAMedicalRecord(@RequestBody MedicalRecord medicalRecord){
+        medicalRecordService.putAMedicalRecord(medicalRecord);
+    }
 }
