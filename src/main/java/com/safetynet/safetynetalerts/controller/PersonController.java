@@ -38,10 +38,9 @@ public class PersonController {
         return this.personService.findPersonInfo(firstName, lastName);
     }
 
-    //TODO : transform request flood/stations with dto
     //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
     @RequestMapping(value = "flood/stations", method = RequestMethod.GET)
-    public FloodDto findFloodStations(@RequestParam(name = "stations") List<Integer> fireStation) {
+    public List <FloodDto> findFloodStations(@RequestParam(name = "stations") List<Integer> fireStation) {
         return this.personService.findFloodStations(fireStation);
     }
 

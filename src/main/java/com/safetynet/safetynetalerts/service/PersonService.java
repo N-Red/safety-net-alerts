@@ -29,6 +29,7 @@ public class PersonService {
     }
 
 
+
     /* GET */
 
     public List<Person> getList() {
@@ -42,81 +43,36 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
-    //TODO : Change with DTO
-    public FloodDto findFloodStations(List<Integer> integers) {
-        FloodDto floodDto = new FloodDto();
-        List<Person> personList = new ArrayList<>();
-        List<MedicalRecord> medicalrecords = medicalrecordRepository.findAllMedicalRecords();
+    public List<FloodDto> findFloodStations(List<Integer> integers) {
+        List<FloodDto> result = new ArrayList<>();
 
+
+        List<MedicalRecord> medicalRecords = medicalrecordRepository.findAllMedicalRecords();
         for (Integer integer : integers) {
-            List<FireStation> firestations = firestationRepository.findAllFireStationsAddressByNumber(integer);
+            List<FireStation> fireStations = firestationRepository.findAllFireStationsAddressByNumber(integer);
 
-            for (FireStation firestation : firestations) {
+            for (FireStation firestation : fireStations) {
                 List<Person> persons = personRepository.findAllPersonsByAddress(firestation.getAddress());
 
-                for (Person person : persons) {
-                    List<Person> membersOfHousehold = personRepository.findAllMembersOfHousehold(person);
-                    for (MedicalRecord medicalRecord : medicalrecords) {
-                        if (personsContainsMedicalRecord(medicalRecord, person)) {
-                            personList.add(person);
+                for (Person p : persons) {
+                    for (MedicalRecord medicalRecord : medicalRecords) {
+                        if (personsContainsMedicalRecord(medicalRecord, p)) {
+                            FloodDto floodDto = new FloodDto();
+
+                            floodDto.setPhoneNumber(p.getPhone());
+                            floodDto.setAge(computeAge(medicalRecord.getBirthdate()));
+                            floodDto.setAllergies(medicalRecord.getAllergies());
+                            floodDto.setMedications(medicalRecord.getMedications());
+                            floodDto.setLastName(p.getLastName());
+
+                            result.add(floodDto);
                         }
                     }
-                    for (Person member : membersOfHousehold) {
-                        for (MedicalRecord medicalRecord : medicalrecords) {
-                            if (personsContainsMedicalRecord(medicalRecord, member)) {
-                                int age = computeAge(medicalRecord.getBirthdate());
-                                personList.add(member);
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-        return floodDto;
-        /*List<String> result = new ArrayList<>();
-        List<MedicalRecord> medicalrecords = medicalrecordRepository.findAllMedicalRecords();
-
-        for (Integer integer : integers) {
-
-            List<FireStation> firestations = firestationRepository.findAllFireStationsAddressByNumber(integer);
-            result.add("Station :" + integer);
-            for (FireStation firestation : firestations) {
-
-                List<Person> persons = personRepository.findAllPersonsByAddress(firestation.getAddress());
-                for (Person person : persons) {
-
-                    result.add(person.getFirstName() + " " + person.getLastName());
-                    List<Person> membersOfHousehold = personRepository.findAllMembersOfHousehold(person);
-
-                    for (MedicalRecord medicalRecord : medicalrecords) {
-                        if (personsContainsMedicalRecord(medicalRecord, person)) {
-                            int age = computeAge(medicalRecord.getBirthdate());
-                            result.add(age + "ans");
-                            result.add(String.valueOf(medicalRecord.getAllergies()));
-                            result.add(String.valueOf(medicalRecord.getMedications()));
-                        }
-                    }
-                    result.add("Members of Household :");
-                    for (Person member : membersOfHousehold) {
-                        result.add(member.getFirstName() + " " + member.getLastName());
-                        for (MedicalRecord medicalRecord : medicalrecords) {
-                            if (personsContainsMedicalRecord(medicalRecord, member)) {
-                                int age = computeAge(medicalRecord.getBirthdate());
-                                result.add(age + "ans");
-                                result.add(String.valueOf(medicalRecord.getAllergies()));
-                                result.add(String.valueOf(medicalRecord.getMedications()));
-                            }
-                        }
-                    }
-
                 }
             }
         }
         return result;
-         */
     }
-    //
 
     /* DTO */
     public FireStationDto findPersonsByFireStation(int stationNumber) {
@@ -208,7 +164,7 @@ public class PersonService {
         return result;
     }
 
-    private int computeAge(String string) {
+    public int computeAge(String string) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
         LocalDate currentDate = LocalDate.now();
         LocalDate birthdate = LocalDate.parse(string, formatter);
@@ -274,25 +230,26 @@ public class PersonService {
         }
         return personInfoDto;
     }
+
     /* POST*/
 
     public void addPerson(Person person) {
-            personRepository.addPerson(person);
+        personRepository.addPerson(person);
     }
 
     /* DELETE */
 
     public void deleteAPerson(Person person) {
-        if(containsInPersonList(person))
-        personRepository.deletePerson(person);
+        if (containsInPersonList(person))
+            personRepository.deletePerson(person);
 
     }
 
-    private boolean containsInPersonList(Person person){
-        List <Person> persons = personRepository.findAllPersons();
-        for (Person p : persons){
-            if(p.getFirstName().equals(person.getFirstName())
-            && p.getLastName().equals(person.getLastName())){
+    private boolean containsInPersonList(Person person) {
+        List<Person> persons = personRepository.findAllPersons();
+        for (Person p : persons) {
+            if (p.getFirstName().equals(person.getFirstName())
+                    && p.getLastName().equals(person.getLastName())) {
                 return true;
             }
         }
@@ -301,7 +258,7 @@ public class PersonService {
 
     /* PUT */
 
-    public void putAPerson(Person person){
+    public void putAPerson(Person person) {
         personRepository.putAPerson(person);
     }
 }

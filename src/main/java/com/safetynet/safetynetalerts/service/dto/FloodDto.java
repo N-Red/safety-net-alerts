@@ -1,42 +1,13 @@
 package com.safetynet.safetynetalerts.service.dto;
 
-
-import com.safetynet.safetynetalerts.model.Person;
-
-import java.util.List;
-
-//http://localhost:8080/flood/stations?stations=<a list of station_numbers>
-/*
-Cette url doit retourner une liste de tous les foyers desservis par la caserne. Cette liste doit regrouper les
-personnes par adresse. Elle doit aussi inclure le nom, le numéro de téléphone et l'âge des habitants, et
-faire figurer leurs antécédents médicaux (médicaments, posologie et allergies) à côté de chaque nom.
- */
 public class FloodDto {
-    private List<Person> people;
     private String lastName;
     private String phoneNumber;
     private int age;
     private String [] medications;
-    private String [] allergies;
+    private String[] allergies;
 
     public FloodDto() {
-    }
-
-    public FloodDto(List<Person> people, String lastName, String phoneNumber, int age, String[] medications, String[] allergies) {
-        this.people = people;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.age = age;
-        this.medications = medications;
-        this.allergies = allergies;
-    }
-
-    public List<Person> getPeople() {
-        return people;
-    }
-
-    public void setPeople(List<Person> people) {
-        this.people = people;
     }
 
     public String getLastName() {
