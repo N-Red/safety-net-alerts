@@ -28,8 +28,6 @@ public class PersonService {
         this.firestationRepository = firestationRepository;
     }
 
-
-
     /* GET */
 
     public List<Person> getList() {
@@ -74,7 +72,6 @@ public class PersonService {
         return result;
     }
 
-    /* DTO */
     public FireStationDto findPersonsByFireStation(int stationNumber) {
 
         FireStationDto result = new FireStationDto();

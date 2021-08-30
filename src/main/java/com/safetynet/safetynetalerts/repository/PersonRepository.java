@@ -71,6 +71,7 @@ public class PersonRepository {
     }
 
     /* PUT */
+
     public void putAPerson(Person person) {
         // look for the person to update
         List<Person> persons = dataHandler.getData().getPersons();

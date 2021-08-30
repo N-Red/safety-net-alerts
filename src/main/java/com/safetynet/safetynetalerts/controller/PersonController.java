@@ -47,7 +47,7 @@ public class PersonController {
     /* Get with Dto */
     //http://localhost:8080/firestation?stationNumber=<stationNumber>
     @RequestMapping(value = "firestation", method = RequestMethod.GET)
-    public FireStationDto findPersonsByFirestationNumber(@RequestParam(name = "stationNumber") int stationNumber) {
+    public FireStationDto findPersonsByFireStationNumber(@RequestParam(name = "stationNumber") int stationNumber) {
         return this.personService.findPersonsByFireStation(stationNumber);
     }
 
