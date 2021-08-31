@@ -1,12 +1,11 @@
 package com.safetynet.safetynetalerts.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.safetynet.safetynetalerts.model.FireStation;
-import com.safetynet.safetynetalerts.model.Person;
-import com.safetynet.safetynetalerts.service.dto.FireDto;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
 @Repository
@@ -19,20 +18,21 @@ public class FireStationRepository {
 
     /* GET */
 
-    public List<FireStation> findAllFirestations() {
+    public List<FireStation> findAllFireStations() {
         return dataHandler.getData().getFirestations();
     }
 
     public List<FireStation> findAllFireStationsAddressByNumber(Integer number) {
         String num = String.valueOf(number);
+
         return dataHandler.getData().getFirestations().stream()
-                .filter(p -> p.getStation().equals(num))
+                .filter(fireStation -> fireStation.getStation().equals(num))
                 .collect(Collectors.toList());
     }
 
     public FireStation findFireStationsNumberByAddress(String address) {
         FireStation fireStationResult = new FireStation();
-        List<FireStation> fireStations = dataHandler.getData().getFirestations().stream().collect(Collectors.toList());
+        List<FireStation> fireStations = new ArrayList<>(dataHandler.getData().getFirestations());
         for (FireStation fireStation : fireStations){
             if(fireStation.getAddress().equals(address)){
                 fireStationResult.setStation(fireStation.getStation());
@@ -58,7 +58,7 @@ public class FireStationRepository {
     }
 
     private int lookForIndexOfFireStation(FireStation fireStation) {
-        List<FireStation> fireStationList = findAllFirestations();
+        List<FireStation> fireStationList = findAllFireStations();
         int index = 0;
         for (int i = 0; i < fireStationList.size(); i++) {
             FireStation fs = fireStationList.get(i);

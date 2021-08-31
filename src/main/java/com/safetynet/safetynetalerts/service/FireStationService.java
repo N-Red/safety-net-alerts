@@ -21,11 +21,12 @@ public class FireStationService {
     /* GET */
 
     public List<FireStation> getList() {
-        return this.fireStationRepository.findAllFirestations();
+        return this.fireStationRepository.findAllFireStations();
     }
 
     public List<String> findPhoneNumbersByStationNumber(int number) {
         List<String> result = new ArrayList<>();
+
         List<FireStation> fireStations = fireStationRepository.findAllFireStationsAddressByNumber(number);
         List<Person> persons = personRepository.findAllPersons();
         for (Person person : persons) {
@@ -61,7 +62,7 @@ public class FireStationService {
     }
 
     private boolean containsInFireStationList(FireStation fireStation){
-        List <FireStation> fireStations = fireStationRepository.findAllFirestations();
+        List <FireStation> fireStations = fireStationRepository.findAllFireStations();
         for (FireStation fs : fireStations){
             if(fs.getAddress().equals(fireStation.getAddress())){
                 return true;
